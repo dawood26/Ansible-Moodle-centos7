@@ -1,0 +1,46 @@
+---
+- name: Manage mysql users/Databases
+  hosts: all
+  tasks:
+    - name: install py-mysql
+      yum:
+        name: MySQL-python
+        state: latest
+    - name: restart mariadb
+      service:
+        name: mariadb
+        state: restarted
+
+    - name: Add mysql user david with password Daw00d26#
+      mysql_user:
+        name: moodle
+        password: Daw00d26#
+        priv: '*.*:ALL,GRANT'
+    - name: Add mysql user david with password Daw00d26#
+      mysql_user:
+        name: wordpress
+        password: Daw00d26#
+        priv: '*.*:ALL,GRANT'
+    - name: Add mysql user david with password Daw00d26#
+      mysql_user:
+        name: joomla
+        password: Daw00d26#
+        priv: '*.*:ALL,GRANT'
+    - name: Add mysql user david with password Daw00d26#
+      mysql_user:
+        name: david
+        password: Daw00d26#
+        priv: '*.*:ALL,GRANT'
+
+    - name: Add Database wordpress
+      mysql_db:
+        name: wordpress
+        state: present
+    - name: Add database moodle,joomla,drupal
+      mysql_db:
+        name:
+          - moodle
+          - drupal
+          - joomla
+        state: present
+

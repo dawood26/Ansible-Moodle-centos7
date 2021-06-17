@@ -1,0 +1,36 @@
+---
+- name: Download Application Packages/Configure Permissions
+  hosts: all
+  tasks:
+    - name: Download phpmyadmin
+      get_url:
+        url: https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-english.tar.gz
+        dest: /tmp/phpmyadmin.tar.gz
+
+    - name: Extract phpmyadmin
+      unarchive:
+        src: /tmp/phpmyadmin.tar.gz
+        dest: /var/www/html
+        remote_src: yes
+    - name: Rename phpmyadmin folder
+      command: mv /var/www/html/phpMyAdmin-5.1.0-english /var/www/html/phpmyadmin
+
+    - name: Change directory permissions
+      file:
+        path: /var/www/html/phpmyadmin
+        state: directory
+        recurse: yes
+        owner: nobody
+        group: nobody
+        mode: '0777'
+    - name: Allow apache access
+      sefcontext:
+        target: '/var/www/html/phpmyadmin(/.*)?'
+        setype: httpd_sys_rw_content_t
+        state: present
+
+    - name: Apply new SELINUX file context
+      command: restorecon -irv /var/www/html/phpmyadmin
+
+
+

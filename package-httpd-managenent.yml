@@ -1,0 +1,19 @@
+---
+- name: manage the packages
+  hosts: all
+  tasks:
+    - name: update the system
+      yum:
+        name: "*"
+        state: latest
+    - name: install packages
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - bash-completion
+          - net-tools
+          - httpd
+          - httpd-tools
+          - mariadb-server
+

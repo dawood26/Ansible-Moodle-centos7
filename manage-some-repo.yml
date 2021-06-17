@@ -1,0 +1,30 @@
+---
+- name: Enable Repository
+  hosts: all
+  tasks:
+    - name: Configure EPEL repository
+      yum:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+        state: present
+    - name: Configure Remi Repository
+      yum:
+        name: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+        state: present
+    - name: Install postgres repoistory
+      yum:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        state: present
+
+    - name: Add MongoDB repository
+      yum_repository:
+        name: MongoDB
+        baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.4/x86_64/
+        gpgcheck: no
+        enabled: yes
+        description: MongoDB packages
+    - name: Update the system
+      yum:
+        name: "*"
+        state: latest
+
+

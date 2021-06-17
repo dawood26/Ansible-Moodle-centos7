@@ -1,0 +1,19 @@
+---
+- name: Manage Services/ports
+  hosts: all
+  tasks:
+    - name: open httpd port
+      firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+    - name: open mysql port
+      firewalld:
+        port: 3306/tcp
+        permanent: yes
+        state: enabled
+    - name: restart firewalld service
+      service:
+        name: firewalld
+        state: restarted
+

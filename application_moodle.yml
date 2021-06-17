@@ -1,0 +1,50 @@
+---
+- name: Download Application Packages/Configure Permissions
+  hosts: webserver4
+  tasks:
+    - name: Download moodle
+      get_url:
+        url: https://download.moodle.org/stable310/moodle-3.10.2.tgz
+        dest: /tmp/moodle-3.10.2.tgz
+
+    - name: Extract moodle
+      unarchive:
+        src: /tmp/moodle-3.10.2.tgz
+        dest: /var/www/html
+        remote_src: yes
+
+    - name: Change directory permissions on moodle folder
+      file:
+        path: /var/www/html/moodle
+        state: directory
+        recurse: yes
+        owner: nobody
+        group: nobody
+        mode: '0777'
+
+    - name: Allow apache access on moodle folder
+      sefcontext:
+        target: '/var/www/html/moodle(/.*)?'
+        setype: httpd_sys_rw_content_t
+        state: present
+
+    - name: Apply new SELINUX file context
+      command: restorecon -irv /var/www/html/moodle
+
+    - name: Create Directory for moodle data
+      file:
+        path: /var/www/moodledata
+        state: directory
+        mode: '0777'
+    - name: Allow apache access on moodle data folder
+      sefcontext:
+          target: '/var/www/moodledata(/.*)?'
+          setype: httpd_sys_rw_content_t
+          state: present
+    - name: Apply new SELINUX file context
+      command: restorecon -irv /var/www/moodledata
+
+
+
+
+

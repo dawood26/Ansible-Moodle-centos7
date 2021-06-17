@@ -1,0 +1,34 @@
+---
+#https://computingforgeeks.com/how-to-install-php-7-4-on-centos-7/
+- name: Manage php Packages
+  hosts: all
+  tasks:
+    - name: install php packages
+      yum:
+        name: "{{ packages }}"
+        enablerepo: remi-php74
+      vars:
+        packages:
+          - php
+          - php-cli
+          - php-mysqlnd
+          - php-bcmath
+          - php-json
+          - php-fpm
+          - php-zip
+          - php-devel
+          - php-gd
+          - php-mcrypt
+          - php-mbstring
+          - php-curl
+          - php-xml
+          - php-pear
+          - php-bcmath
+          - php-json
+          - php-intl
+          - php-xmlrpc
+    - name: Restart Httpd
+      service:
+        name: httpd
+        state: restarted
+
